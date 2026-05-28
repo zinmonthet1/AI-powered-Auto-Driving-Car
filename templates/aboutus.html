@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>About PARAMI AML</h1>
+    <p>Parami AML is a pioneer in the field of autonomous intelligence. We focus on bridging the gap between hardware and high-level decision-making through advanced machine learning algorithms.</p>
+    <p> Our autonomous self-driving model uses  real-world driving data to train Self-Driving (Supervised) to take care of the most stressful parts of daily driving while helping make the roads safer for you and others. When enabled, your vehicle will drive you almost anywhere with your active supervision, requiring minimal intervention.</p>
+    <div style="margin: 40px 0; background: #eee; padding: 30px; border-radius: 8px;">
+        <h3>The Training Phase</h3>
+        <p>Our training involves subjecting our neural architecture to varied road types, from highways to narrow streets, across all weather conditions received from the cars' sensors. By simulating extreme edge cases, we ensure our cars handle ice, rain, and night driving with unmatched stability.</p>
+    </div>
+    <img src="{{ url_for('static', filename='Images/image1.jpg') }}" style="width: 100%; max-width: 600px; border-radius: 10px;">
+
+    <img src="{{ url_for('static', filename='Images/image5.jpg') }}" style="width: 100%; max-width: 600px; border-radius: 10px;">
+
+    <img src="{{ url_for('static', filename='Images/image2.jpg') }}" style="width: 100%; max-width: 600px; border-radius: 10px;">
+</div>
+{% endblock %}

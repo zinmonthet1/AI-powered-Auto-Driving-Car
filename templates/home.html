@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="slider-container">
+    <div class="slide active">
+        <video autoplay muted loop><source src="{{ url_for('static', filename='Images/vd1.mp4') }}" type="video/mp4"></video>
+        <div class="slide-overlay">
+            <h1>Autonomous Self-Driving Technology</h1>
+            <a href="/vehicles" class="btn btn-orange">Buy Now</a>
+            <a href="/predict" class="btn btn-blue">Test Our Cars' Decision</a>
+        </div>
+    </div>
+    <!--
+    
+    <div class="slide"><img src="{{ url_for('static', filename='Images/image1.jpg') }}"></div>
+    <div class="slide"><img src="{{ url_for('static', filename='Images/image2.jpg') }}"></div>
+    -->
+</div>
+
+<div class="container">
+    <h2>Welcome to PARAMI AML Autonomous Driving Technology</h2>
+    <p style="max-width: 800px; margin: auto;">Our autonomous self-driving model uses  real-world driving data to train Self-Driving (Supervised) to take care of the most stressful parts of daily driving while helping make the roads safer for you and others. When enabled, your vehicle will drive you almost anywhere with your active supervision, requiring minimal intervention.
+
+</p>
+</div>
+
+<div class="container" style="background: #fdfdfd;">
+    <h2>Available Products</h2>
+    <div class="card-grid">
+        <div class="card">
+            <img src="{{ url_for('static', filename='Images/image3.jpg') }}">
+            <h4>Self Driving Cars</h4>
+            <p>Premium autonomous self-driving cars for daily transit.</p>
+            <p><strong>89,999 USD</strong></p>
+        </div>
+        <div class="card">
+            <img src="{{ url_for('static', filename='Images/image4.jpg') }}">
+            <h4>Self-Driving Delivery</h4>
+            <p>Automated self-driven delivery solutions for your grab.</p>
+            <p><strong>499 USD</strong></p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Experience the Intelligence</h2>
+    <video controls style="width: 70%; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        <source src="{{ url_for('static', filename='Images/vd2.mp4') }}" type="video/mp4">
+    </video>
+</div>
+
+<script>
+    let slides = document.querySelectorAll('.slide');
+    let index = 0;
+    setInterval(() => {
+        slides[index].classList.remove('active');
+        index = (index + 1) % slides.length;
+        slides[index].classList.add('active');
+    }, 4000);
+</script>
+{% endblock %}

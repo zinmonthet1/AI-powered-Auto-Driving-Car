@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Test Our Cars' Decision-making</h1>
+    <p >Control the 18 critical features received from cars' sensors below to see the our self-driving cars' logic in real-time.</p>
+
+    <form action="/predict" method="post" class="predict-container" style="max-width: 800px; margin: auto;">
+        
+        <h3 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 30px;">Surroundings & Obstacles</h3>
+        
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Obstacle Distance (m): Distance to nearest object</label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>0</span>
+                <input type="range" name="obstacle_distance_m" min="0" max="250" value="50" oninput="this.nextElementSibling.value = this.value">
+                <output style="font-weight: bold; color: var(--blue);">50</output>
+                <span>250</span>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Relative Speed (m/s): Speed difference between your car and leading vehicle</label>
+
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>-30</span>
+                <input type="range" name="relative_speed_mps" min="-30" max="30" value="0" oninput="this.nextElementSibling.value = this.value">
+                <output style="font-weight: bold; color: var(--blue);">0</output>
+                <span>30</span>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Number of Obstacles: Total objects detected</label>
+            <input type="number" name="num_obstacles" value="1" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Lane Offset (m): Deviation from lane center</label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>-2</span>
+                <input type="range" name="lane_offset_m" min="-2" max="2" step="0.1" value="0" oninput="this.nextElementSibling.value = this.value">
+                <output style="font-weight: bold; color: var(--blue);">0</output>
+                <span>2</span>
+            </div>
+        </div>
+
+        <h3 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 30px;">Vehicle Dynamics</h3>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Ego Speed (m/s): Current vehicle ground speed</label>
+            <input type="number" name="ego_speed_mps" value="15" step="0.1" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Acceleration (m/s²): Rate of speed change</label>
+            <input type="number" name="ego_acceleration_mps2" value="0" step="0.1" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Steering Angle (°): Current wheel rotation</label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>-180</span>
+                <input type="range" name="steering_angle_deg" min="-180" max="180" value="0" oninput="this.nextElementSibling.value = this.value">
+                <output style="font-weight: bold; color: var(--blue);">0</output>
+                <span>180</span>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Yaw Rate (rad/s): Vertical axis rotation</label>
+            <input type="number" name="yaw_rate_rads" value="0" step="0.01" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <h3 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 30px;">Environment & Road</h3>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Weather Condition: </label>
+            <select name="weather_condition" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                <option value="clear">Clear</option>
+                <option value="rain">Rain</option>
+                <option value="fog">Fog</option>
+                <option value="night">Night</option>
+            </select>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Road Surface: </label>
+            <select name="road_surface_condition" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+                <option value="dry">Dry</option>
+                <option value="wet">Wet</option>
+                <option value="icy">Icy</option>
+            </select>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Visibility Range (m): Maximum sensor depth</label>
+            <input type="number" name="visibility_range_m" value="200" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Traffic Density (veh/km): Local road congestion</label>
+            <input type="number" name="traffic_density_veh_per_km" value="20" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Road Curvature: Sharpness of bend (0 = straight)</label>
+            <input type="number" name="road_curvature_1pm" value="0.001" step="0.0001" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Road Width (m): Total drivable surface width</label>
+            <input type="number" name="road_width_m" value="3.5" step="0.1" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <h3 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-top: 30px;">Internal Mechanical Inputs & Control</h3>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Risk Probability: Car-Sensor's threat assessment score</label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>0.0</span>
+                <input type="range" name="risk_probability" min="0" max="1" step="0.01" value="0.1" oninput="this.nextElementSibling.value = this.value">
+                <output style="font-weight: bold; color: var(--blue);">0.1</output>
+                <span>1.0</span>
+            </div>  
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Speed Limit (km/h): Legal road speed limit</label>
+            <input type="number" name="speed_limit_kmh" value="60" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Throttle Position: Engine power application</label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>0%</span>
+                <input type="range" name="throttle_position" min="0" max="1" step="0.01" value="0.2" oninput="this.nextElementSibling.value = this.value">
+                <output style="font-weight: bold; color: var(--blue);">0.2</output>
+                <span>100%</span>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 20px;">
+            <label>Brake Pressure: Applied braking force</label>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span>0%</span>
+                <input type="range" name="brake_pressure" min="0" max="1" step="0.01" value="0" oninput="this.nextElementSibling.value = this.value">
+                <output style="font-weight: bold; color: var(--blue);">0.0</output>
+                <span>100%</span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-blue" style="width: 100%; margin-top: 20px;">Analyze the situation and make decision</button>
+    </form>
+
+    {% if decision %}
+    <div id="result-card" style="margin: 50px auto; max-width: 800px; background: white; border: 2px solid var(--blue); padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        <h2 style="font-weight: 300;">RECOMMENDED ACTION: <span style="font-weight: 600;">{{ decision.upper() }}</span></h2>
+        
+        
+        <p style="font-size: 1.1rem; color: #333;"> 
+            {% if 'stop' in decision.lower() %}
+            In this situation, the car will <strong>stop immediately</strong>. Our system prioritizes safety, halting the vehicle to avoid detected hazards with trusted precision. 
+            {% elif 'follow' in decision.lower() %}
+            In this situation, the car will <strong>continue to follow</strong>. It maintains a safe lane and adapts to the flow of traffic smoothly. 
+            {% elif 'lane' in decision.lower() %}
+            In this situation, the car will <strong>execute a lane change</strong> safely. The AI has calculated a clear path while maintaining safety margins. 
+            {% elif 'overtake' in decision.lower() %}
+            In this situation, the car will <strong>overtake</strong> the vehicle ahead. All sensors confirm a safe window for the overtake. 
+            {% else %}
+            The AI has calculated a <strong>{{ decision }}</strong> to ensure continuous movement while maintaining safety margins. 
+            {% endif %}
+        </p>
+    </div>
+    <script>
+        document.getElementById('result-card').scrollIntoView({ behavior: 'smooth' });
+    </script>
+    {% endif %}
+</div>
+{% endblock %}
